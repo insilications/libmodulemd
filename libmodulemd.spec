@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 1.5.2
-Release  : 2
+Release  : 3
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Summary  : No detailed summary available
@@ -26,7 +26,6 @@ BuildRequires : pkgconfig(gtk-doc)
 BuildRequires : pkgconfig(yaml-0.1)
 BuildRequires : python3
 BuildRequires : valgrind
-Patch1: 0001-Disable-developer-build.patch
 
 %description
 [![Travis](https://img.shields.io/travis/fedora-modularity/libmodulemd.svg?style=plastic)](https://travis-ci.org/fedora-modularity/libmodulemd)
@@ -90,15 +89,14 @@ license components for the libmodulemd package.
 
 %prep
 %setup -q -n modulemd-1.5.2
-%patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1531425235
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain   builddir
+export SOURCE_DATE_EPOCH=1531430044
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain -Ddeveloper_build=false  builddir
 ninja -v -C builddir
 
 %install
