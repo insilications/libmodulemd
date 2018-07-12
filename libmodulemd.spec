@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 1.5.2
-Release  : 1
+Release  : 2
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Summary  : No detailed summary available
@@ -97,7 +97,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1531351488
+export SOURCE_DATE_EPOCH=1531425235
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain   builddir
 ninja -v -C builddir
 
