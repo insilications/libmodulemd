@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 1.5.2
-Release  : 3
+Release  : 4
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.5.2/modulemd-1.5.2.tar.xz
 Summary  : No detailed summary available
