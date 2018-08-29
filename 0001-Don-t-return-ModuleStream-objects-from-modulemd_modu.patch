@@ -1,0 +1,217 @@
+From 59573d72fbef9421eb5a77b7858ad60d78b7f7f0 Mon Sep 17 00:00:00 2001
+From: "Owen W. Taylor" <otaylor@fishsoup.net>
+Date: Thu, 9 Aug 2018 11:06:34 +0200
+Subject: [PATCH 1/2] Don't return ModuleStream objects from
+ modulemd_module_new_all_from_*_ext()
+
+These older, deprecated functions should not have been changed to
+return ModuleStream objects rather than Module objects.
+---
+ .../modulemd-1.0/private/modulemd-yaml.h      |  3 ++
+ modulemd/v1/modulemd-common.c                 | 35 ++-----------------
+ modulemd/v1/modulemd-module.c                 | 18 ++++++++--
+ modulemd/v1/modulemd-yaml-utils.c             | 27 ++++++++++++++
+ 4 files changed, 49 insertions(+), 34 deletions(-)
+
+diff --git a/modulemd/include/modulemd-1.0/private/modulemd-yaml.h b/modulemd/include/modulemd-1.0/private/modulemd-yaml.h
+index aea47b6360cae37d478480a0479b9006a4a7a2b3..bea23f7fcf28c9bc7798b6d3cef121ebd4015681 100644
+--- a/modulemd/include/modulemd-1.0/private/modulemd-yaml.h
++++ b/modulemd/include/modulemd-1.0/private/modulemd-yaml.h
+@@ -268,10 +268,13 @@ typedef gboolean (*ModulemdParsingFunc) (yaml_parser_t *parser,
+   while (0)
+ 
+ ModulemdModule **
+ mmd_yaml_dup_modules (GPtrArray *objects);
+ 
++GPtrArray *
++mmd_yaml_convert_modulestreams (GPtrArray *objects);
++
+ gboolean
+ parse_yaml_file (const gchar *path,
+                  GPtrArray **data,
+                  GPtrArray **failures,
+                  GError **error);
+diff --git a/modulemd/v1/modulemd-common.c b/modulemd/v1/modulemd-common.c
+index f4339fbf7666c29a27c53e3a31defb020bf14b7f..a4936856fc38b0646267035e9ae9a8f42d5092b3 100644
+--- a/modulemd/v1/modulemd-common.c
++++ b/modulemd/v1/modulemd-common.c
+@@ -25,39 +25,10 @@ modulemd_objects_from_file (const gchar *yaml_file, GError **error)
+ {
+   return modulemd_objects_from_file_ext (yaml_file, NULL, error);
+ }
+ 
+ 
+-static GPtrArray *
+-convert_modulestream_to_module (GPtrArray *objects)
+-{
+-  GPtrArray *compat_data = NULL;
+-  GObject *object = NULL;
+-  gsize i;
+-
+-
+-  compat_data = g_ptr_array_new_full (objects->len, g_object_unref);
+-
+-  for (i = 0; i < objects->len; i++)
+-    {
+-      object = g_ptr_array_index (objects, i);
+-      if (MODULEMD_IS_MODULESTREAM (object))
+-        {
+-          g_ptr_array_add (objects,
+-                           modulemd_module_new_from_modulestream (
+-                             MODULEMD_MODULESTREAM (object)));
+-        }
+-      else
+-        {
+-          g_ptr_array_add (compat_data, g_object_ref (object));
+-        }
+-    }
+-
+-  return compat_data;
+-}
+-
+-
+ GPtrArray *
+ modulemd_objects_from_file_ext (const gchar *yaml_file,
+                                 GPtrArray **failures,
+                                 GError **error)
+ {
+@@ -71,11 +42,11 @@ modulemd_objects_from_file_ext (const gchar *yaml_file,
+     }
+ 
+   /* For backwards-compatibility, we need to return Modulemd.Module objects,
+    * not Modulemd.ModuleStream objects
+    */
+-  compat_data = convert_modulestream_to_module (data);
++  compat_data = mmd_yaml_convert_modulestreams (data);
+ 
+   return compat_data;
+ }
+ 
+ 
+@@ -112,11 +83,11 @@ modulemd_objects_from_stream_ext (FILE *stream,
+     }
+ 
+   /* For backwards-compatibility, we need to return Modulemd.Module objects,
+    * not Modulemd.ModuleStream objects
+    */
+-  compat_data = convert_modulestream_to_module (data);
++  compat_data = mmd_yaml_convert_modulestreams (data);
+ 
+   return compat_data;
+ }
+ 
+ 
+@@ -153,11 +124,11 @@ modulemd_objects_from_string_ext (const gchar *yaml_string,
+     }
+ 
+   /* For backwards-compatibility, we need to return Modulemd.Module objects,
+    * not Modulemd.ModuleStream objects
+    */
+-  compat_data = convert_modulestream_to_module (data);
++  compat_data = mmd_yaml_convert_modulestreams (data);
+ 
+   return compat_data;
+ }
+ 
+ 
+diff --git a/modulemd/v1/modulemd-module.c b/modulemd/v1/modulemd-module.c
+index 4da81fa4770a152c901ea14e8a5166b1a86da8bb..db6196c4b6476b03f62a44bc6b67fd4f223a9ecf 100644
+--- a/modulemd/v1/modulemd-module.c
++++ b/modulemd/v1/modulemd-module.c
+@@ -3008,17 +3008,24 @@ modulemd_module_new_all_from_file (const gchar *yaml_file,
+ void
+ modulemd_module_new_all_from_file_ext (const gchar *yaml_file,
+                                        GPtrArray **data)
+ {
+   GError *error = NULL;
++  g_autoptr (GPtrArray) to_convert = NULL;
+ 
+-  if (!parse_yaml_file (yaml_file, data, NULL, &error))
++  if (!parse_yaml_file (yaml_file, &to_convert, NULL, &error))
+     {
+       g_debug ("Error parsing YAML: %s", error->message);
+       g_error_free (error);
+       return;
+     }
++
++  /* For backwards-compatibility, we need to return Modulemd.Module objects,
++   * not Modulemd.ModuleStream objects
++   */
++  if (data)
++    *data = mmd_yaml_convert_modulestreams (to_convert);
+ }
+ 
+ 
+ /**
+  * modulemd_module_new_from_string:
+@@ -3127,17 +3134,24 @@ modulemd_module_new_all_from_string (const gchar *yaml_string,
+ void
+ modulemd_module_new_all_from_string_ext (const gchar *yaml_string,
+                                          GPtrArray **data)
+ {
+   GError *error = NULL;
++  g_autoptr (GPtrArray) to_convert = NULL;
+ 
+-  if (!parse_yaml_string (yaml_string, data, NULL, &error))
++  if (!parse_yaml_string (yaml_string, &to_convert, NULL, &error))
+     {
+       g_debug ("Error parsing YAML: %s", error->message);
+       g_error_free (error);
+       return;
+     }
++
++  /* For backwards-compatibility, we need to return Modulemd.Module objects,
++   * not Modulemd.ModuleStream objects
++   */
++  if (data)
++    *data = mmd_yaml_convert_modulestreams (to_convert);
+ }
+ 
+ 
+ /**
+  * modulemd_module_new_from_stream:
+diff --git a/modulemd/v1/modulemd-yaml-utils.c b/modulemd/v1/modulemd-yaml-utils.c
+index 8e3e8d6bd923bf1753cfe9191db8f6a300c39032..453de0a92b8b50f13384acc4e73fae2f412f7776 100644
+--- a/modulemd/v1/modulemd-yaml-utils.c
++++ b/modulemd/v1/modulemd-yaml-utils.c
+@@ -373,10 +373,37 @@ mmd_yaml_dup_modules (GPtrArray *objects)
+     }
+ 
+   return modules;
+ }
+ 
++GPtrArray *
++mmd_yaml_convert_modulestreams (GPtrArray *objects)
++{
++  GPtrArray *compat_data = NULL;
++  GObject *object = NULL;
++  gsize i;
++
++  compat_data = g_ptr_array_new_full (objects->len, g_object_unref);
++
++  for (i = 0; i < objects->len; i++)
++    {
++      object = g_ptr_array_index (objects, i);
++      if (MODULEMD_IS_MODULESTREAM (object))
++        {
++          g_ptr_array_add (objects,
++                           modulemd_module_new_from_modulestream (
++                             MODULEMD_MODULESTREAM (object)));
++        }
++      else
++        {
++          g_ptr_array_add (compat_data, g_object_ref (object));
++        }
++    }
++
++  return compat_data;
++}
++
+ const gchar *
+ mmd_yaml_get_event_name (yaml_event_type_t type)
+ {
+   switch (type)
+     {
+-- 
+2.17.1
+
