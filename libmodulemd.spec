@@ -4,16 +4,16 @@
 #
 Name     : libmodulemd
 Version  : 1.6.2
-Release  : 6
+Release  : 7
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.6.2/modulemd-1.6.2.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-1.6.2/modulemd-1.6.2.tar.xz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : MIT
-Requires: libmodulemd-bin
-Requires: libmodulemd-data
-Requires: libmodulemd-lib
-Requires: libmodulemd-license
+Requires: libmodulemd-bin = %{version}-%{release}
+Requires: libmodulemd-data = %{version}-%{release}
+Requires: libmodulemd-lib = %{version}-%{release}
+Requires: libmodulemd-license = %{version}-%{release}
 BuildRequires : buildreq-meson
 BuildRequires : docbook-xml
 BuildRequires : glibc-bin
@@ -33,8 +33,8 @@ Patch1: 0001-Don-t-return-ModuleStream-objects-from-modulemd_modu.patch
 %package bin
 Summary: bin components for the libmodulemd package.
 Group: Binaries
-Requires: libmodulemd-data
-Requires: libmodulemd-license
+Requires: libmodulemd-data = %{version}-%{release}
+Requires: libmodulemd-license = %{version}-%{release}
 
 %description bin
 bin components for the libmodulemd package.
@@ -51,10 +51,10 @@ data components for the libmodulemd package.
 %package dev
 Summary: dev components for the libmodulemd package.
 Group: Development
-Requires: libmodulemd-lib
-Requires: libmodulemd-bin
-Requires: libmodulemd-data
-Provides: libmodulemd-devel
+Requires: libmodulemd-lib = %{version}-%{release}
+Requires: libmodulemd-bin = %{version}-%{release}
+Requires: libmodulemd-data = %{version}-%{release}
+Provides: libmodulemd-devel = %{version}-%{release}
 
 %description dev
 dev components for the libmodulemd package.
@@ -71,8 +71,8 @@ doc components for the libmodulemd package.
 %package lib
 Summary: lib components for the libmodulemd package.
 Group: Libraries
-Requires: libmodulemd-data
-Requires: libmodulemd-license
+Requires: libmodulemd-data = %{version}-%{release}
+Requires: libmodulemd-license = %{version}-%{release}
 
 %description lib
 lib components for the libmodulemd package.
@@ -95,13 +95,14 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1535566093
+export SOURCE_DATE_EPOCH=1550709872
+export LDFLAGS="${LDFLAGS} -fno-lto"
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --prefix /usr --buildtype=plain -Ddeveloper_build=false  builddir
 ninja -v -C builddir
 
 %install
-mkdir -p %{buildroot}/usr/share/doc/libmodulemd
-cp COPYING %{buildroot}/usr/share/doc/libmodulemd/COPYING
+mkdir -p %{buildroot}/usr/share/package-licenses/libmodulemd
+cp COPYING %{buildroot}/usr/share/package-licenses/libmodulemd/COPYING
 DESTDIR=%{buildroot} ninja -C builddir install
 
 %files
@@ -177,5 +178,5 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/lib64/libmodulemd.so.1.6.2
 
 %files license
-%defattr(-,root,root,-)
-/usr/share/doc/libmodulemd/COPYING
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/libmodulemd/COPYING
