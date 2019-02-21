@@ -1,8 +1,11 @@
-1.6.2
+2.1.0
 docbook-xml
+glib-dev
 glibc-bin
 gobject-introspection-dev
+gtk-doc-dev
 pkgconfig(gobject-2.0)
 pkgconfig(gtk-doc)
 pkgconfig(yaml-0.1)
 valgrind
+yaml-dev

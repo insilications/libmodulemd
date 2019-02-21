@@ -94,6 +94,7 @@ libmodulemd.so.1:modulemd_defaults_dup_module_name
 libmodulemd.so.1:modulemd_defaults_dup_profile_defaults
 libmodulemd.so.1:modulemd_defaults_dup_profiles_for_stream
 libmodulemd.so.1:modulemd_defaults_error_quark
+libmodulemd.so.1:modulemd_defaults_get_modified
 libmodulemd.so.1:modulemd_defaults_get_type
 libmodulemd.so.1:modulemd_defaults_merge
 libmodulemd.so.1:modulemd_defaults_new
@@ -110,6 +111,7 @@ libmodulemd.so.1:modulemd_defaults_peek_profile_defaults
 libmodulemd.so.1:modulemd_defaults_peek_version
 libmodulemd.so.1:modulemd_defaults_set_default_stream
 libmodulemd.so.1:modulemd_defaults_set_intents
+libmodulemd.so.1:modulemd_defaults_set_modified
 libmodulemd.so.1:modulemd_defaults_set_module_name
 libmodulemd.so.1:modulemd_defaults_set_profile_defaults
 libmodulemd.so.1:modulemd_defaults_set_profiles_for_stream
@@ -142,7 +144,9 @@ libmodulemd.so.1:modulemd_improvedmodule_dumps
 libmodulemd.so.1:modulemd_improvedmodule_get_defaults
 libmodulemd.so.1:modulemd_improvedmodule_get_name
 libmodulemd.so.1:modulemd_improvedmodule_get_stream_by_name
+libmodulemd.so.1:modulemd_improvedmodule_get_stream_by_nsvc
 libmodulemd.so.1:modulemd_improvedmodule_get_streams
+libmodulemd.so.1:modulemd_improvedmodule_get_streams_by_name
 libmodulemd.so.1:modulemd_improvedmodule_get_type
 libmodulemd.so.1:modulemd_improvedmodule_new
 libmodulemd.so.1:modulemd_improvedmodule_peek_defaults
@@ -523,3 +527,4 @@ libmodulemd.so.1:parse_raw_yaml_sequence
 libmodulemd.so.1:parse_yaml_file
 libmodulemd.so.1:parse_yaml_stream
 libmodulemd.so.1:parse_yaml_string
+libmodulemd.so.1:skip_unknown_yaml

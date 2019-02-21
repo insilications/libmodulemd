@@ -1,4 +1,7 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
 gobject-introspection
+# to ensure source-highlight gets installed... gtk-doc-dev is autodetected
+gtk-doc
 libxslt
+pygobject
