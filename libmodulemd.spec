@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 2.3.0
-Release  : 14
+Release  : 15
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-2.3.0/modulemd-2.3.0.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-2.3.0/modulemd-2.3.0.tar.xz
 Summary  : No detailed summary available
