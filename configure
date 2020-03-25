@@ -1,3 +1,4 @@
 -Ddeveloper_build=false
--Dbuild_api_v1=true
--Dbuild_api_v2=false
+-Dskip_formatters=true
+-Dwith_docs=false
+-Dwith_manpages=enabled
