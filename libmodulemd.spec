@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 2.9.2
-Release  : 17
+Release  : 18
 URL      : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-2.9.2/modulemd-2.9.2.tar.xz
 Source0  : https://github.com/fedora-modularity/libmodulemd/releases/download/libmodulemd-2.9.2/modulemd-2.9.2.tar.xz
 Summary  : No detailed summary available
@@ -20,7 +20,7 @@ Requires: libmodulemd-python3 = %{version}-%{release}
 BuildRequires : buildreq-meson
 BuildRequires : file-dev
 BuildRequires : glib-dev
-BuildRequires : gobject-introspection
+BuildRequires : gobject-introspection-dev
 BuildRequires : gtk-doc
 BuildRequires : help2man
 BuildRequires : libxslt
@@ -120,11 +120,11 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1585678483
+export SOURCE_DATE_EPOCH=1586065944
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
-export FCFLAGS="$CFLAGS -fno-lto "
-export FFLAGS="$CFLAGS -fno-lto "
+export FCFLAGS="$FFLAGS -fno-lto "
+export FFLAGS="$FFLAGS -fno-lto "
 export CXXFLAGS="$CXXFLAGS -fno-lto "
 CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddeveloper_build=false \
 -Dskip_formatters=true \

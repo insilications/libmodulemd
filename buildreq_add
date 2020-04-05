@@ -2,7 +2,7 @@
 # picked up automatically. One name per line, no whitespace.
 file-dev
 glib-dev
-gobject-introspection
+gobject-introspection-dev
 gtk-doc
 help2man
 libxslt
