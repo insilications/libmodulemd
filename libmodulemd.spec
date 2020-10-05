@@ -4,7 +4,7 @@
 #
 Name     : libmodulemd
 Version  : 2.9.4
-Release  : 21
+Release  : 22
 URL      : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
 Source0  : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
 Summary  : No detailed summary available
@@ -108,7 +108,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1601889935
+export SOURCE_DATE_EPOCH=1601891216
 export GCC_IGNORE_WERROR=1
 export CFLAGS="$CFLAGS -fno-lto "
 export FCFLAGS="$FFLAGS -fno-lto "
