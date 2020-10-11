@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : libmodulemd
 Version  : 2.9.4
-Release  : 24
+Release  : 25
 URL      : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
 Source0  : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
 Summary  : No detailed summary available
@@ -124,6 +124,15 @@ Requires: python3-core
 python3 components for the libmodulemd package.
 
 
+%package staticdev
+Summary: staticdev components for the libmodulemd package.
+Group: Default
+Requires: libmodulemd-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the libmodulemd package.
+
+
 %prep
 %setup -q -n libmodulemd-libmodulemd-2.9.4
 cd %{_builddir}/libmodulemd-libmodulemd-2.9.4
@@ -134,7 +143,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1602430263
+export SOURCE_DATE_EPOCH=1602432246
 export GCC_IGNORE_WERROR=1
 ## altflags1 content
 export CFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC"
@@ -167,7 +176,7 @@ export MAKEFLAGS=%{?_smp_mflags}
 ##
 %define _lto_cflags 1
 ##
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddeveloper_build=false -Dskip_formatters=true -Dwith_docs=false -Dwith_manpages=enabled  builddir
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Ddefault_library=both -Ddeveloper_build=false -Dskip_formatters=true -Dwith_docs=false -Dwith_manpages=enabled  builddir
 ninja -v -C builddir
 
 %check
@@ -236,3 +245,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 %files python3
 %defattr(-,root,root,-)
 /usr/lib/python3*/*
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libmodulemd.a
