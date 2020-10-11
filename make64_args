@@ -1,1 +1,0 @@
-LDFLAGS="${LDFLAGS} -Wl,--whole-archive /usr/lib64/libgobject-2.0.a /usr/lib64/libglib-2.0.a /usr/lib64/libpcre.a -pthread -ldl -lm -lmvec -Wl,--no-whole-archive"
