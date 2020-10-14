@@ -5,19 +5,20 @@
 %define keepstatic 1
 Name     : libmodulemd
 Version  : 2.9.4
-Release  : 25
-URL      : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
-Source0  : https://github.com/fedora-modularity/libmodulemd/archive/libmodulemd-2.9.4.tar.gz
+Release  : 26
+URL      : file:///insilications/build/clearlinux/packages/libmodulemd/libmodulemd-2.9.4.tar.gz
+Source0  : file:///insilications/build/clearlinux/packages/libmodulemd/libmodulemd-2.9.4.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : GPL-2.0
 Requires: libmodulemd-bin = %{version}-%{release}
 Requires: libmodulemd-data = %{version}-%{release}
 Requires: libmodulemd-lib = %{version}-%{release}
-Requires: libmodulemd-man = %{version}-%{release}
 Requires: libmodulemd-python = %{version}-%{release}
 Requires: libmodulemd-python3 = %{version}-%{release}
 BuildRequires : buildreq-meson
+BuildRequires : expat-dev
+BuildRequires : expat-staticdev
 BuildRequires : file-dev
 BuildRequires : glib-dev
 BuildRequires : glib-staticdev
@@ -32,6 +33,7 @@ BuildRequires : libxml2-staticdev
 BuildRequires : libxslt
 BuildRequires : libxslt-dev
 BuildRequires : libxslt-staticdev
+BuildRequires : nodejs
 BuildRequires : openssl-dev
 BuildRequires : openssl-staticdev
 BuildRequires : pcre-dev
@@ -47,6 +49,7 @@ BuildRequires : python3-dev
 BuildRequires : python3-staticdev
 BuildRequires : rpm-dev
 BuildRequires : rpm-staticdev
+BuildRequires : swig
 BuildRequires : xz-dev
 BuildRequires : xz-staticdev
 BuildRequires : yaml-dev
@@ -98,14 +101,6 @@ Requires: libmodulemd-data = %{version}-%{release}
 lib components for the libmodulemd package.
 
 
-%package man
-Summary: man components for the libmodulemd package.
-Group: Default
-
-%description man
-man components for the libmodulemd package.
-
-
 %package python
 Summary: python components for the libmodulemd package.
 Group: Default
@@ -134,8 +129,8 @@ staticdev components for the libmodulemd package.
 
 
 %prep
-%setup -q -n libmodulemd-libmodulemd-2.9.4
-cd %{_builddir}/libmodulemd-libmodulemd-2.9.4
+%setup -q -n libmodulemd
+cd %{_builddir}/libmodulemd
 
 %build
 unset http_proxy
@@ -143,7 +138,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1602432246
+export SOURCE_DATE_EPOCH=1602691963
 export GCC_IGNORE_WERROR=1
 ## altflags1 content
 export CFLAGS="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -flimit-function-alignment -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -feliminate-unused-debug-types -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe -ffat-lto-objects -fPIC"
@@ -174,9 +169,9 @@ export MAKEFLAGS=%{?_smp_mflags}
 
 ## altflags1 end
 ##
-%define _lto_cflags 1
+%global _lto_cflags 1
 ##
-CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Ddefault_library=both -Ddeveloper_build=false -Dskip_formatters=true -Dwith_docs=false -Dwith_manpages=enabled  builddir
+CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS" LDFLAGS="$LDFLAGS" meson --libdir=lib64 --prefix=/usr --buildtype=plain -Ddefault_library=both -Ddefault_library=both -Ddeveloper_build=false -Dskip_formatters=true -Dwith_docs=false -Dwith_manpages=disabled  builddir
 ninja -v -C builddir
 
 %check
@@ -220,6 +215,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 /usr/include/modulemd-2.0/modulemd-module-stream-v2.h
 /usr/include/modulemd-2.0/modulemd-module-stream.h
 /usr/include/modulemd-2.0/modulemd-module.h
+/usr/include/modulemd-2.0/modulemd-obsoletes.h
 /usr/include/modulemd-2.0/modulemd-profile.h
 /usr/include/modulemd-2.0/modulemd-rpm-map-entry.h
 /usr/include/modulemd-2.0/modulemd-service-level.h
@@ -233,11 +229,7 @@ DESTDIR=%{buildroot} ninja -C builddir install
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libmodulemd.so.2
-/usr/lib64/libmodulemd.so.2.9.4
-
-%files man
-%defattr(0644,root,root,0755)
-/usr/share/man/man1/modulemd-validator.1
+/usr/lib64/libmodulemd.so.2.10.0
 
 %files python
 %defattr(-,root,root,-)
