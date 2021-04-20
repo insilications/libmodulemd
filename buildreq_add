@@ -1,9 +1,10 @@
 # This file contains additional build requirements that did not get
 # picked up automatically. One name per line, no whitespace.
 buildreq-meson
+expat-dev
+expat-staticdev
 file-dev
 glib-dev
-glib-staticdev
 gobject-introspection-dev
 gtk-doc
 help2man
@@ -35,5 +36,3 @@ zlib-dev
 zlib-staticdev
 zstd-dev
 zstd-staticdev
-expat-dev
-expat-staticdev
