@@ -46,8 +46,8 @@ BuildRequires : pygobject
 BuildRequires : pygobject-dev
 BuildRequires : python3-dev
 BuildRequires : python3-staticdev
+BuildRequires : rpm
 BuildRequires : rpm-dev
-BuildRequires : rpm-staticdev
 BuildRequires : swig
 BuildRequires : xz-dev
 BuildRequires : xz-staticdev
@@ -141,7 +141,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1618911663
+export SOURCE_DATE_EPOCH=1618980084
 export GCC_IGNORE_WERROR=1
 ## altflags_pgo content
 ## pgo generate
